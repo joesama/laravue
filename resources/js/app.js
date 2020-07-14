@@ -8,34 +8,23 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+import VueRouter from 'vue-router';
 
-const files = require.context('./', true, /\.vue$/i)
-files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
-// import VueRouter from 'vue-router';
 import routes from './routes'
+
+Vue.use(VueRouter)
 
 const router = new VueRouter({ 
     routes,
     mode: 'history',
-	scrollBehavior (to, from, savedPosition) {
-		return { x: 0, y: 0 }
-	}
+    scrollBehavior (to, from, savedPosition) {
+      return { x: 0, y: 0 }
+    }
 });
 
 import VueAxios from 'vue-axios'
  
 Vue.use(VueAxios, window.axios)
-
-
-import Welcome from './pages/Welcome.vue'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -45,17 +34,5 @@ import Welcome from './pages/Welcome.vue'
 
 const app = new Vue({
     router,
-    data: {
-        currentRoute: window.location.pathname
-    },
-    computed: {
-      ViewComponent () {
-        const matchingView = routes[this.currentRoute]
-        console.log(matchingView);
-        return matchingView
-          ? require('./pages/' + matchingView + '.vue')
-          : require('./pages/NotFound.vue')
-      }
-    },
-    render: (h) => h(Welcome),
+    render: (h) => h(require('./pages/Welcome.vue').default),
   }).$mount('#app')
