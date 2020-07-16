@@ -8,4 +8,5 @@ export default [
     {path:'/register', component: require('./pages/Registration').default},
     {path:'/login', component: require('./pages/Login').default},
     {path:'/user', component:  require('./pages/User').default},
+    {path:'/forgot', component:  require('./pages/Forgot').default},
   ]
