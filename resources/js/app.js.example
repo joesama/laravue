@@ -1,0 +1,45 @@
+require('./bootstrap');
+
+import Vue from 'vue'
+
+import find from 'lodash/find';
+
+import VueRouter from 'vue-router';
+
+import Login from './pages/Login'
+
+import routes from './routes'
+
+import VueAxios from 'vue-axios'
+
+Vue.use(VueRouter, window.axios, VueAxios)
+
+const router = new VueRouter({ 
+    routes,
+    mode: 'history',
+    scrollBehavior (to, from, savedPosition) {
+      return { x: 0, y: 0 }
+    }
+});
+
+const app = new Vue({
+    router,
+    data: function () {
+        return {}
+    },
+    computed: {
+        componentCurrent () {
+            let vm = this
+            
+            const matchingView = find(routes, function(route) {
+                return route.path === vm.$route.path
+              });
+
+            return (matchingView.component === null) ? 
+            Login : matchingView.component
+        }
+    },
+    render (h) {
+        return h(this.componentCurrent)
+    }
+}).$mount('#app')
